@@ -1,0 +1,8 @@
+{
+  "name": "CricScore",
+  "description": "Display cricket scoreboard on top bar",
+  "uuid": "CricScore@nahidhasan98.github.com",
+  "shell-version": [
+    "42"
+  ]
+}
