@@ -84,27 +84,27 @@ function makeHttpGetRequest(url) {
             res += ": " + scores[1];
         }
 
-        // If the game not start yet
-        if (scores.length == 0) {
-            let regexp = /ng-bind="(\d+) \|date: 'EEEE, d MMM, hh:mm a'/;
-            if ((match = regexp.exec(data)) !== null) {
-                let time = match[1];
-                time /= 1000;
+        // // If the game not start yet, show the start time
+        // if (scores.length == 0) {
+        //     let regexp = /ng-bind="(\d+) \|date: 'EEEE, d MMM, hh:mm a'/;
+        //     if ((match = regexp.exec(data)) !== null) {
+        //         let time = match[1];
+        //         time /= 1000;
 
-                let date = new Date(time * 1000);
-                const options = {
-                    weekday: 'short',      // Abbreviated weekday name (e.g., 'Mon')
-                    hour: '2-digit',       // Two-digit hour (e.g., '02')
-                    minute: '2-digit',     // Two-digit minutes (e.g., '30')
-                    hour12: true,          // Use 12-hour clock format (e.g., 'AM' or 'PM')
-                };
+        //         let date = new Date(time * 1000);
+        //         const options = {
+        //             weekday: 'short',      // Abbreviated weekday name (e.g., 'Mon')
+        //             hour: '2-digit',       // Two-digit hour (e.g., '02')
+        //             minute: '2-digit',     // Two-digit minutes (e.g., '30')
+        //             hour12: true,          // Use 12-hour clock format (e.g., 'AM' or 'PM')
+        //         };
 
-                // Format the date
-                const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+        //         // Format the date
+        //         const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
-                res += " (" + formattedDate + ")";
-            }
-        }
+        //         res += " (" + formattedDate + ")";
+        //     }
+        // }
 
         console.log(res);
         return res;
