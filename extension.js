@@ -30,7 +30,7 @@ function enable() {
 
     indicator.actor.add_child(label);
 
-    timeout = Mainloop.timeout_add(5000, function () {
+    timeout = Mainloop.timeout_add(10000, function () {
         _refresh();
         return true;
     });
@@ -60,10 +60,14 @@ function makeHttpGetRequest(url) {
             if (teams.length == 2) break;
         }
 
-        const regexScore = /style='display:inline-block; width:100%'>(.*?)<\/div>/g;
-        while ((match = regexScore.exec(data)) !== null) {
+        // const regexScore = /style='display:inline-block; width:100%'>(.*?)<\/div>/g;
+        let regexScore = new RegExp(`class='text-normal'>${teams[0]}<\/span><\/div><div class='cb-col-50 cb-ovr-flo' style='display:inline-block; width:100%'>(.*?)<\/div>`, "g");
+        if ((match = regexScore.exec(data)) !== null) {
             scores.push(match[1]);
-            if (scores.length == 2) break;
+        }
+        regexScore = new RegExp(`class='text-normal'>${teams[1]}<\/span><\/div><div class='cb-col-50 cb-ovr-flo' style='display:inline-block; width:100%'>(.*?)<\/div>`, "g");
+        if ((match = regexScore.exec(data)) !== null) {
+            scores.push(match[1]);
         }
 
         // console.log(teams);
@@ -78,6 +82,28 @@ function makeHttpGetRequest(url) {
         res += teams[1];
         if (scores[1]) {
             res += ": " + scores[1];
+        }
+
+        // If the game not start yet
+        if (scores.length == 0) {
+            let regexp = /ng-bind="(\d+) \|date: 'EEEE, d MMM, hh:mm a'/;
+            if ((match = regexp.exec(data)) !== null) {
+                let time = match[1];
+                time /= 1000;
+
+                let date = new Date(time * 1000);
+                const options = {
+                    weekday: 'short',      // Abbreviated weekday name (e.g., 'Mon')
+                    hour: '2-digit',       // Two-digit hour (e.g., '02')
+                    minute: '2-digit',     // Two-digit minutes (e.g., '30')
+                    hour12: true,          // Use 12-hour clock format (e.g., 'AM' or 'PM')
+                };
+
+                // Format the date
+                const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+                res += " (" + formattedDate + ")";
+            }
         }
 
         console.log(res);
